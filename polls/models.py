@@ -26,7 +26,7 @@ class Quiz(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(blank=False, null=False, default=date.today)
     description = models.TextField()
-    user_id = models.ManyToManyField(
+    users = models.ManyToManyField(
         User, 
         blank=True
     )
@@ -87,7 +87,8 @@ class Choice(models.Model):
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE, 
-        default=None
+        default=None,
+        blank=True, null=True
     )
     question = models.ForeignKey(
         Question, 
