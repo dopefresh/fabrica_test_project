@@ -31,9 +31,9 @@ class QuizView(APIView):
 
     def get(self, request, pk):
         try:
-            quiz = Quiz.objects.get(id=pk)
-            quiz_serializer = QuizSerializer(quiz, many=False)
-            return Response(quiz_serializer.data)
+            questions = Question.objects.filter(quiz__pk=pk)
+            question_serializer = QuestionSerializer(questions, many=True)
+            return Response(question_serializer.data)
         except Exception as e:
             logger.error(str(e))
             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)

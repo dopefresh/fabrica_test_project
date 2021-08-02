@@ -36,7 +36,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 
 class QuizAdmin(admin.ModelAdmin):
-    fields = ('title', 'start_date', 'end_date', 'description', 'user',)
+    fields = ('title', 'start_date', 'end_date', 'description', 'users',)
     model = Quiz
     list_display = ('title',)
     list_filter = ['title']
