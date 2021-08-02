@@ -12,3 +12,16 @@ localhost:8000/admin
 
 ### POST:
     localhost:8000/api/v1/quizzes/quiz_id/question_id/ - Создать ответ/ответы на вопрос с question_id = question_id 
+
+
+# Запуск: 
+git clone https://github.com/dopefresh/fabrica_test_project.git
+poetry install
+poetry shell
+
+Создаём файл .env с содержимым: 
+SECRET_KEY='k7)6)$r#e^s5^-4hk9(az(r106xff6fg+-hk%^cz+k&h2&#l%a'
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
