@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .models import User, Quiz, Question, Choice
-from .serializers import UserSerializer, QuizSerializer, QuestionSerializer, ChoiceSerializer
+from .models import User, Quiz, Question, UserChoice
+from .serializers import UserSerializer, QuizSerializer, QuestionSerializer, UserChoiceSerializer
 
 from loguru import logger
 import datetime
@@ -51,17 +51,17 @@ class QuestionView(APIView):
             user, created = User.objects.get_or_create(id=data['user_id'])
             user.quiz_set.add(quiz)
             question = Question.objects.get(pk=question_pk, quiz=quiz)
-            question.choice_set.all().delete()
+            question.user_choices.all().delete()
             choices = []
             for answer in data.get('answers'):
-                choice = Choice(
+                choice = UserChoice(
                     answer=answer, 
                     user=User.objects.get(id=data['user_id']), 
                     question=question
                 )
                 choices.append(choice)
             if len(choices):
-                Choice.objects.bulk_create(choices)
+                UserChoice.objects.bulk_create(choices)
 
             return Response('', status=status.HTTP_201_CREATED)
         except Exception as e:
@@ -88,8 +88,8 @@ class UserQuestionChoiceView(APIView):
     def get(self, request, user_pk, question_pk):
         try:
             user = User.objects.get(id=user_pk)
-            choices = Choice.objects.filter(question__pk=question_pk, user=user)
-            serializer = ChoiceSerializer(choices, many=True)
+            choices = UserChoice.objects.filter(question__pk=question_pk, user=user)
+            serializer = UserChoiceSerializer(choices, many=True)
             return Response(serializer.data)
         except Exception as e:
             logger.error(str(e))

@@ -16,6 +16,9 @@ class User(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+    class Meta:
+        verbose_name_plural = "Пользователи"
 
 
 class Quiz(models.Model):
@@ -33,7 +36,7 @@ class Quiz(models.Model):
     
     class Meta:
         db_table = 'quiz'
-        verbose_name_plural = "quizzes"
+        verbose_name_plural = "Опросы"
 
     def save(self, *args, **kwargs):
         logger.info(kwargs)
@@ -73,13 +76,31 @@ class Question(models.Model):
     
     class Meta:
         db_table = 'question'
-        verbose_name_plural = "questions"
+        verbose_name_plural = "Вопросы"
 
     def __str__(self):
         return f'title: {self.title}, quiz: {self.quiz.title}'
 
 
-class Choice(models.Model):
+class AvailableChoice(models.Model):
+    """
+    Модель доступного пользователю ответа 
+    """
+    answer = models.TextField(blank=False, null=False, default='')
+    question = models.ForeignKey(
+        Question, 
+        on_delete=models.CASCADE,
+        related_name='available_choices'
+    )
+    class Meta:
+        db_table = 'available_choice'
+        verbose_name_plural = "Доступные пользователю выборы"
+    
+    def __str__(self):
+        return f'{self.question.title} - {self.answer}'
+
+
+class UserChoice(models.Model):
     """
     Модель ответа пользователя
     """
@@ -92,12 +113,13 @@ class Choice(models.Model):
     )
     question = models.ForeignKey(
         Question, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='user_choices'
     )
     
     class Meta:
-        db_table = 'choice'
-        verbose_name_plural = "choices"
+        db_table = 'user_choice'
+        verbose_name_plural = "Выборы пользователя"
     
     def __str__(self):
         return f'{self.question.title} - {self.answer}'

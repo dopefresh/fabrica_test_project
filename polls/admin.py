@@ -1,23 +1,17 @@
-# from django.contrib import admin
-
-# from .models import User, Quiz, Question, Choice
-
-
-# admin.site.register(User)
-# admin.site.register(Quiz)
-# admin.site.register(Question)
-# admin.site.register(Choice)
-
-
-
 from django.contrib import admin
 
-from .models import User, Quiz, Question, Choice
+from .models import User, Quiz, Question, UserChoice, AvailableChoice
 
 
-class ChoiceTabular(admin.TabularInline):
+class UserChoiceTabular(admin.TabularInline):
     fields = ('answer', 'user',)
-    model = Choice
+    model = UserChoice
+    extra = 1
+
+
+class AvailableChoiceTabular(admin.TabularInline):
+    fields = ('answer',)
+    model = AvailableChoice
     extra = 1
 
 
@@ -32,15 +26,15 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('title',)
     list_filter = ['title']
     search_fields = ['title']
-    inlines = [ChoiceTabular]
+    inlines = [UserChoiceTabular, AvailableChoiceTabular]
 
 
 class QuizAdmin(admin.ModelAdmin):
     fields = ('title', 'start_date', 'end_date', 'description', 'users',)
     model = Quiz
-    list_display = ('title',)
-    list_filter = ['title']
-    search_fields = ['title']
+    list_display = ('title', 'start_date', 'end_date',)
+    list_filter = ['title', 'start_date', 'end_date']
+    search_fields = ['title', 'start_date', 'end_date']
     inlines = [QuestionTabular]
 
 
@@ -52,4 +46,5 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Choice)
+admin.site.register(UserChoice)
+admin.site.register(AvailableChoice)
