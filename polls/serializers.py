@@ -29,3 +29,33 @@ class UserChoiceSerializer(serializers.ModelSerializer):
         fields = ('answer', 'question',)
 
 
+
+class ManyUserChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserChoice
+        fields = ('answer',)
+
+
+class ManyQuestionSerializer(serializers.ModelSerializer):
+    user_choices = UserChoiceSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Question
+        fields = ('title', 'choice_type', 'user_choices',)
+
+
+class QuizQuestionAnswersSerializer(serializers.ModelSerializer):
+    questions = ManyQuestionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Quiz
+        fields = ('title', 'start_date', 'end_date', 'questions',)
+
+
+class UserQuizQuestionAnswersSerializer(serializers.ModelSerializer):
+    quizzes = QuizQuestionAnswersSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'quizzes',)
+

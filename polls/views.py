@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from .models import User, Quiz, Question, UserChoice
-from .serializers import UserSerializer, QuizSerializer, QuestionSerializer, UserChoiceSerializer
+from .serializers import UserSerializer, QuizSerializer, QuestionSerializer, UserChoiceSerializer, UserQuizQuestionAnswersSerializer
 
 from loguru import logger
 import datetime
@@ -75,22 +75,24 @@ class UserView(APIView):
     def get(self, request, pk):
         try:
             user = User.objects.get(id=pk)
-            serializer = QuizSerializer(user.quiz_set.all(), many=True)
+            logger.info(user)
+            serializer = UserQuizQuestionAnswersSerializer(instance=user, many=False)
+            logger.info(serializer.data)
             return Response(serializer.data)
         except Exception as e:
             logger.error(str(e))
             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserQuestionChoiceView(APIView):
-    permission_classes = []
+# class UserQuestionChoiceView(APIView):
+#     permission_classes = []
 
-    def get(self, request, user_pk, question_pk):
-        try:
-            user = User.objects.get(id=user_pk)
-            choices = UserChoice.objects.filter(question__pk=question_pk, user=user)
-            serializer = UserChoiceSerializer(choices, many=True)
-            return Response(serializer.data)
-        except Exception as e:
-            logger.error(str(e))
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+#     def get(self, request, user_pk, question_pk):
+#         try:
+#             user = User.objects.get(id=user_pk)
+#             choices = UserChoice.objects.filter(question__pk=question_pk, user=user)
+#             serializer = UserChoiceSerializer(choices, many=True)
+#             return Response(serializer.data)
+#         except Exception as e:
+#             logger.error(str(e))
+#             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)

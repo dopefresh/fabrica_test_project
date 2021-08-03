@@ -46,5 +46,4 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(UserChoice)
 admin.site.register(AvailableChoice)

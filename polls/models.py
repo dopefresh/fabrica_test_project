@@ -31,7 +31,8 @@ class Quiz(models.Model):
     description = models.TextField()
     users = models.ManyToManyField(
         User, 
-        blank=True
+        blank=True,
+        related_name='quizzes'
     )
     
     class Meta:
@@ -58,7 +59,8 @@ class Question(models.Model):
     quiz = models.ForeignKey(
         Quiz, 
         on_delete=models.CASCADE,
-        default=1
+        default=1,
+        related_name='questions'
     )
     title = models.CharField(
         max_length=200, 
