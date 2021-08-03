@@ -82,17 +82,3 @@ class UserView(APIView):
         except Exception as e:
             logger.error(str(e))
             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
-
-
-# class UserQuestionChoiceView(APIView):
-#     permission_classes = []
-
-#     def get(self, request, user_pk, question_pk):
-#         try:
-#             user = User.objects.get(id=user_pk)
-#             choices = UserChoice.objects.filter(question__pk=question_pk, user=user)
-#             serializer = UserChoiceSerializer(choices, many=True)
-#             return Response(serializer.data)
-#         except Exception as e:
-#             logger.error(str(e))
-#             return Response(str(e), status=status.HTTP_400_BAD_REQUEST)

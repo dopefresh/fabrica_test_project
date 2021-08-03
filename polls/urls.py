@@ -9,5 +9,4 @@ urlpatterns = [
     path('quizzes/<int:pk>/', views.QuizView.as_view(), name='quiz'),
     path('quizzes/<int:quiz_pk>/<int:question_pk>/', views.QuestionView.as_view(), name='question-answer'),
     path('users/<int:pk>/', views.UserView.as_view(), name='user-quizzes'),
-    # path('users/<int:user_pk>/<int:question_pk>/', views.UserQuestionChoiceView.as_view(), name='user-quiz-question-answers'),
 ]
