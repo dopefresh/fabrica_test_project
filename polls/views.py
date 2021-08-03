@@ -51,13 +51,18 @@ class QuestionView(APIView):
             user, created = User.objects.get_or_create(id=data['user_id'])
             user.quiz_set.add(quiz)
             question = Question.objects.get(pk=question_pk, quiz=quiz)
+            question.choice_set.all().delete()
+            choices = []
             for answer in data.get('answers'):
-                Choice.objects.update_or_create(
+                choice = Choice(
                     answer=answer, 
                     user=User.objects.get(id=data['user_id']), 
                     question=question
                 )
-                logger.info('Before error')
+                choices.append(choice)
+            if len(choices):
+                Choice.objects.bulk_create(choices)
+
             return Response('', status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.error(str(e))
